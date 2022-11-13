@@ -51,8 +51,8 @@ void mmo_wait_for_interrupt()
 
 std::string mmo_to_utf8(const std::string& source, std::string_view encoding)
 {
-    icu::UnicodeString ustring(source.data(), static_cast<int>(source.size()),
-                               encoding.data());
+    const icu::UnicodeString ustring(
+        source.data(), static_cast<int>(source.size()), encoding.data());
     std::string result;
     ustring.toUTF8String(result);
     return result;

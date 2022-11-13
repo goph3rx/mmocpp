@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  code-coverage:
 
     runs-on: ubuntu-latest
 
@@ -34,7 +34,6 @@ jobs:
           g++ \
           clang-tidy \
           lcov \
-          make \
           ninja-build
 
     - name: Install dependencies
@@ -50,10 +49,9 @@ jobs:
           -DCMAKE_BUILD_TYPE=Debug \
           -DCMAKE_CXX_FLAGS=--coverage \
           -DCMAKE_C_FLAGS=--coverage \
-          -DLINT=Y \
           -GNinja
 
-    - name: Build projects
+    - name: Build project
       run: cmake --build Build
 
     - name: Run tests
@@ -70,3 +68,49 @@ jobs:
       with:
         fail_ci_if_error: true
         verbose: true
+
+  lint:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Package cache
+        uses: actions/cache@v2
+        with:
+          path: "~/.conan/data"
+          key: ${{ runner.os }}-conan
+
+      - name: Install Conan
+        uses: turtlebrowser/get-conan@main
+
+      - name: Configure Conan
+        run: >
+          conan profile new default --detect &&
+          conan profile update settings.compiler.libcxx=libstdc++11 default
+
+      - name: Install toolchain
+        run: >
+          sudo apt-get update && sudo apt-get install -y \
+            g++ \
+            clang-tidy \
+            cppcheck \
+            ninja-build
+
+      - name: Install dependencies
+        run: >
+          mkdir Build &&
+          cd Build &&
+          conan install .. --build missing
+
+      - name: Configure project
+        run: >
+          cd Build &&
+          cmake .. \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DLINT=Y \
+            -GNinja
+
+      - name: Build project
+        run: cmake --build Build

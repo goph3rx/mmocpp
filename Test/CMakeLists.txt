@@ -16,3 +16,9 @@ add_test(
         NAME Tests
         COMMAND Tests
 )
+
+# Disable linting of tests
+set_property(
+        TARGET Tests
+        PROPERTY CXX_CLANG_TIDY
+)
