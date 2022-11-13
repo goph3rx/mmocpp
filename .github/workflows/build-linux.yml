@@ -43,7 +43,14 @@ jobs:
         conan install .. --build missing
 
     - name: Configure project
-      run: cd Build && cmake .. -DCMAKE_BUILD_TYPE=Release -DLINT=Y -GNinja
+      run: >
+        cd Build &&
+        cmake .. \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DCMAKE_CXX_FLAGS=--coverage \
+          -DCMAKE_C_FLAGS=--coverage \
+          -DLINT=Y \
+          -GNinja
 
     - name: Build projects
       run: cmake --build Build
