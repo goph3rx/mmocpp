@@ -30,6 +30,13 @@ else()
     )
 endif()
 
+# Enable lints
+# See https://www.kitware.com/static-checks-with-cmake-cdash-iwyu-clang-tidy-lwyu-cpplint-and-cppcheck/
+if (LINT)
+    set(CMAKE_CXX_CLANG_TIDY clang-tidy --warnings-as-errors=* -checks=-*,bugprone-*,clang-analyzer-*,concurrency-*,misc-*,modernize-*,performance-*,portability-*,-modernize-use-trailing-return-type,-modernize-avoid-c-arrays,-bugprone-easily-swappable-parameters,-misc-no-recursion)
+    set(CMAKE_CXX_CPPCHECK cppcheck --std=c++17 --enable=style --error-exitcode=1 --suppress=localMutex --suppress=preprocessorErrorDirective)
+endif()
+
 # Libraries
 add_subdirectory("MMO")
 add_subdirectory("Test")
