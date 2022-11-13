@@ -1,0 +1,39 @@
+name: C/C++ Windows
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Package cache
+      uses: actions/cache@v2
+      with:
+        path: "%USERPROFILE%\\.conan\\data"
+        key: ${{ runner.os }}-conan
+
+    - name: Install Conan
+      uses: turtlebrowser/get-conan@main
+
+    - name: Install dependencies
+      run: >
+        mkdir Build &&
+        cd Build &&
+        conan install .. --build missing
+
+    - name: Configure project
+      run: cd Build && cmake ..
+
+    - name: Build project
+      run: cmake --build Build --config Release
+
+    - name: Run tests
+      run: ctest --test-dir Build -C Release --output-on-failure
