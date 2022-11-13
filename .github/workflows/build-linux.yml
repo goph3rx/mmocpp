@@ -58,6 +58,11 @@ jobs:
     - name: Run tests
       run: ctest --test-dir Build --output-on-failure
 
+    - name: Prepare coverage report
+      run: >
+        lcov --directory . --capture --output-file coverage.info &&
+        lcov --list coverage.info
+
     - name: Code coverage
       uses: codecov/codecov-action@v3
       with:
