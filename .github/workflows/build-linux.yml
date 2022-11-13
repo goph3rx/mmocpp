@@ -1,0 +1,72 @@
+name: C/C++ Linux
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Package cache
+      uses: actions/cache@v2
+      with:
+        path: "~/.conan/data"
+        key: ${{ runner.os }}-conan
+
+    - name: Install Conan
+      uses: turtlebrowser/get-conan@main
+
+    - name: Configure Conan
+      run: >
+        conan profile new default --detect &&
+        conan profile update settings.compiler.libcxx=libstdc++11 default
+
+    - name: Install toolchain
+      run: >
+        sudo apt-get update && sudo apt-get install -y \
+          g++ \
+          clang-tidy \
+          lcov \
+          make \
+          ninja-build
+
+    - name: Install dependencies
+      run: >
+        mkdir Build &&
+        cd Build &&
+        conan install .. --build missing
+
+    - name: Configure project
+      run: >
+        cd Build &&
+        cmake .. \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DCMAKE_CXX_FLAGS=--coverage \
+          -DCMAKE_C_FLAGS=--coverage \
+          -DLINT=Y \
+          -GNinja
+
+    - name: Build projects
+      run: cmake --build Build
+
+    - name: Run tests
+      run: ctest --test-dir Build --output-on-failure
+
+    - name: Prepare coverage report
+      run: >
+        lcov --directory . --capture --output-file coverage.info &&
+        lcov --remove coverage.info '/usr/*' "${HOME}"'/.conan/*' --output-file coverage.info &&
+        lcov --list coverage.info
+
+    - name: Code coverage
+      uses: codecov/codecov-action@v3
+      with:
+        fail_ci_if_error: true
+        verbose: true
