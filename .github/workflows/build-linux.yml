@@ -1,0 +1,46 @@
+name: C/C++ Linux
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install Conan
+      uses: turtlebrowser/get-conan@main
+
+    - name: Configure Conan
+      run: >
+        conan profile new default --detect &&
+        conan profile update settings.compiler.libcxx=libstdc++11 default
+
+    - name: Install toolchain
+      run: >
+        sudo apt-get update && sudo apt-get install -y \
+          g++ \
+          clang-tidy \
+          make \
+          ninja-build
+
+    - name: Install dependencies
+      run: >
+        mkdir Build &&
+        cd Build &&
+        conan install .. --build missing
+
+    - name: Configure project
+      run: cd Build && cmake .. -DCMAKE_BUILD_TYPE=Release -DLINT=Y -GNinja
+
+    - name: Build projects
+      run: cmake --build Build
+
+    - name: Run tests
+      run: ctest --test-dir Build --output-on-failure
