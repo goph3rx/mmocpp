@@ -62,7 +62,7 @@ jobs:
     - name: Prepare coverage report
       run: >
         lcov --directory . --capture --output-file coverage.info &&
-        lcov --remove coverage.info '/usr/*' '/home/runner/.cache/*' --output-file coverage.info &&
+        lcov --remove coverage.info '/usr/*' "${HOME}"'/.conan/*' --output-file coverage.info &&
         lcov --list coverage.info
 
     - name: Code coverage
