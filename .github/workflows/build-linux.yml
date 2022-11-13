@@ -57,3 +57,9 @@ jobs:
 
     - name: Run tests
       run: ctest --test-dir Build --output-on-failure
+
+    - name: Code coverage
+      uses: codecov/codecov-action@v3
+      with:
+        fail_ci_if_error: true
+        verbose: true
