@@ -1,0 +1,14 @@
+[requires]
+asio/1.24.0
+gtest/cci.20210126
+icu/71.1
+libpqxx/7.7.4
+openssl/1.1.1q
+protobuf/3.21.4
+spdlog/1.10.0
+
+[generators]
+cmake
+
+[options]
+icu:data_packaging=static
