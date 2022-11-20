@@ -13,7 +13,7 @@ target_include_directories(
         PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
 )
-target_link_libraries(TypesLib PUBLIC protobuf::libprotobuf)
+target_link_libraries(TypesLib PUBLIC CONAN_PKG::protobuf)
 
 # Disable linting of generated code
 set_property(
