@@ -6,6 +6,7 @@ add_executable(Tests ${TEST_SOURCES})
 target_link_libraries(
         Tests
         PRIVATE
+        AccountLib
         MMOLib
         CONAN_PKG::gtest
         CONAN_LIB::gtest_gmock
