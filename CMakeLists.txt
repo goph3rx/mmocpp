@@ -38,5 +38,6 @@ if (LINT)
 endif()
 
 # Libraries
+add_subdirectory("Types")
 add_subdirectory("MMO")
 add_subdirectory("Test")
