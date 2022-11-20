@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+// Database record for account data.
+message AccountRecord {
+  string username = 1; // Name of the account.
+  string salt = 2; // Hex representation of the randomly chosen salt.
+  string password = 3; // Hex representation of the password hash.
+  int32 last_world = 4; // Last world that this account accessed.
+  optional google.protobuf.Timestamp banned_until = 5;  // If set, blocks the account until given time.
+}
