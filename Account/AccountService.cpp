@@ -102,13 +102,13 @@ void AccountService::create(const std::string& username,
 std::optional<AccountRecord> AccountService::find(const std::string& username,
                                                   const std::string& password)
 {
-    SPDLOG_DEBUG("Finding account with username={}", username);
+    SPDLOG_DEBUG("Finding account with username: {}", username);
 
     // Load the record
     auto record = _database->get(username);
     if (!record)
     {
-        SPDLOG_DEBUG("Account with username={} was not found", username);
+        SPDLOG_DEBUG("Account with username: {} was not found", username);
         return record;
     }
 
@@ -124,7 +124,7 @@ std::optional<AccountRecord> AccountService::find(const std::string& username,
     if (hash.size() != record->password().size() ||
         CRYPTO_memcmp(hash.data(), record->password().data(), hash.size()) != 0)
     {
-        SPDLOG_DEBUG("Account with username={} got password mismatch",
+        SPDLOG_DEBUG("Account with username: {} got password mismatch",
                      username);
         return {};
     }
@@ -132,7 +132,7 @@ std::optional<AccountRecord> AccountService::find(const std::string& username,
     // Return result
     record->mutable_salt()->clear();
     record->mutable_password()->clear();
-    SPDLOG_DEBUG("Account with username={} was {}", username,
+    SPDLOG_DEBUG("Account with username: {} was {}", username,
                  record->ShortDebugString());
     return record;
 }
