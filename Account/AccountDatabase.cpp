@@ -41,7 +41,7 @@ void AccountDatabase::ping()
 
 void AccountDatabase::create(const AccountRecord& record)
 {
-    SPDLOG_DEBUG("Creating new account with username={}", record.username());
+    SPDLOG_DEBUG("Creating new account with username: {}", record.username());
 
     auto connection = connect(_options);
     connection.prepare("account_create",
@@ -58,7 +58,7 @@ void AccountDatabase::create(const AccountRecord& record)
 
 std::optional<AccountRecord> AccountDatabase::get(const std::string& username)
 {
-    SPDLOG_DEBUG("Getting account with username={}", username);
+    SPDLOG_DEBUG("Getting account with username: {}", username);
 
     // Query the database
     auto connection = connect(_options);
@@ -70,7 +70,7 @@ std::optional<AccountRecord> AccountDatabase::get(const std::string& username)
     transaction.commit();
     if (result.empty())
     {
-        SPDLOG_DEBUG("Account with username={} was not found", username);
+        SPDLOG_DEBUG("Account with username: {} was not found", username);
         return {};
     }
 
@@ -87,6 +87,6 @@ std::optional<AccountRecord> AccountDatabase::get(const std::string& username)
         *record.mutable_banned_until() =
             mmo_parse_timestamp(banned_util.as<std::string>());
     }
-    SPDLOG_DEBUG("Account with username={} was found", username);
+    SPDLOG_DEBUG("Account with username: {} was found", username);
     return record;
 }
