@@ -26,13 +26,13 @@ TEST(AccountService, create_success)
     // Given
     AccountDatabaseMock database;
     AccountService service(&database);
-    auto isValid = [](const AccountRecord& record)
+    auto is_valid = [](const AccountRecord& record)
     {
         return record.username() == "hello" && !record.salt().empty() &&
                !record.password().empty() && record.last_world() == -1 &&
                !record.has_banned_until();
     };
-    EXPECT_CALL(database, create(Truly(isValid))).WillOnce(Return());
+    EXPECT_CALL(database, create(Truly(is_valid))).WillOnce(Return());
 
     // When/Then
     service.create("hello", "world");
