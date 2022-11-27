@@ -51,6 +51,11 @@ class MMOReader
      */
     long read_d();
 
+    /**
+     * Read Q value (8 bytes).
+     */
+    long long read_q();
+
    private:
     /**
      * Ensure that writer has enough space available.

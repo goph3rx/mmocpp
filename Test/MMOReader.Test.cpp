@@ -123,3 +123,27 @@ TEST(MMOReader, read_d_overflow)
     // When/Then
     ASSERT_THROW(reader.read_d(), std::range_error);
 }
+
+TEST(MMOReader, read_q)
+{
+    // Given
+    auto buffer = test_from_hex("7A6B5D1F7B6A5C10");
+    MMOReader reader(asio::buffer(buffer));
+
+    // When
+    auto value = reader.read_q();
+
+    // Then
+    ASSERT_EQ(reader.position(), 8);
+    ASSERT_EQ(value, 0x105C6A7B1F5D6B7ALL);
+}
+
+TEST(MMOReader, read_q_overflow)
+{
+    // Given
+    std::vector<char> buffer;
+    MMOReader reader(asio::buffer(buffer));
+
+    // When/Then
+    ASSERT_THROW(reader.read_q(), std::range_error);
+}

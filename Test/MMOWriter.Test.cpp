@@ -104,6 +104,37 @@ TEST(MMOWriter, write_d_overflow)
     ASSERT_THROW(writer.write_d(0x105C6A7B), std::range_error);
 }
 
+TEST(MMOWriter, write_q)
+{
+    // Given
+    std::vector<char> buffer(8, 0);
+    MMOWriter writer(asio::buffer(buffer));
+
+    // When
+    writer.write_q(0x105C6A7B115B6C7F);
+
+    // Then
+    ASSERT_EQ(writer.size(), 8);
+    ASSERT_EQ(buffer[0], 0x7F);
+    ASSERT_EQ(buffer[1], 0x6C);
+    ASSERT_EQ(buffer[2], 0x5B);
+    ASSERT_EQ(buffer[3], 0x11);
+    ASSERT_EQ(buffer[4], 0x7B);
+    ASSERT_EQ(buffer[5], 0x6A);
+    ASSERT_EQ(buffer[6], 0x5C);
+    ASSERT_EQ(buffer[7], 0x10);
+}
+
+TEST(MMOWriter, write_q_overflow)
+{
+    // Given
+    std::vector<char> buffer;
+    MMOWriter writer(asio::buffer(buffer));
+
+    // When/Then
+    ASSERT_THROW(writer.write_q(0x105C6A7B115B6C7FLL), std::range_error);
+}
+
 TEST(MMOWriter, write_b)
 {
     // Given

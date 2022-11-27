@@ -49,6 +49,12 @@ class MMOWriter
     void write_d(long value);
 
     /**
+     * Write Q value (8 bytes).
+     * @param value Value.
+     */
+    void write_q(long long value);
+
+    /**
      * Write B value.
      * @param value Value.
      */
