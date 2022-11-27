@@ -39,6 +39,20 @@ void MMOWriter::write_d(long value)
     _position += 4;
 }
 
+void MMOWriter::write_q(long long value)
+{
+    ensure_available(8);
+    data()[_position] = static_cast<char>(value);
+    data()[_position + 1] = static_cast<char>(value >> 8);
+    data()[_position + 2] = static_cast<char>(value >> 16);
+    data()[_position + 3] = static_cast<char>(value >> 24);
+    data()[_position + 4] = static_cast<char>(value >> 32);
+    data()[_position + 5] = static_cast<char>(value >> 40);
+    data()[_position + 6] = static_cast<char>(value >> 48);
+    data()[_position + 7] = static_cast<char>(value >> 56);
+    _position += 8;
+}
+
 void MMOWriter::write_b(const std::string& value)
 {
     ensure_available(value.size());

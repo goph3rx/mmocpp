@@ -54,6 +54,28 @@ long MMOReader::read_d()
     return result;
 }
 
+long long MMOReader::read_q()
+{
+    ensure_available(8);
+    long long result = data()[_position + 7] & 0xFF;
+    result <<= 8;
+    result |= data()[_position + 6] & 0xFF;
+    result <<= 8;
+    result |= data()[_position + 5] & 0xFF;
+    result <<= 8;
+    result |= data()[_position + 4] & 0xFF;
+    result <<= 8;
+    result |= data()[_position + 3] & 0xFF;
+    result <<= 8;
+    result |= data()[_position + 2] & 0xFF;
+    result <<= 8;
+    result |= data()[_position + 1] & 0xFF;
+    result <<= 8;
+    result |= data()[_position] & 0xFF;
+    _position += 8;
+    return result;
+}
+
 void MMOReader::ensure_available(std::size_t size)
 {
     if (_position + size > _buffer.size())
