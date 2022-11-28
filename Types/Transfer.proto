@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+// Database record for transfer data.
+message TransferRecord {
+  string account = 1; // Account username.
+  int64 auth = 2; // First part of the transfer token.
+  int64 play = 3; // Second part of the transfer token.
+  google.protobuf.Timestamp expiry = 4;  // Specifies when the transfer expires.
+}
