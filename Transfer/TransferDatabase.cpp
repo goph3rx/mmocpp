@@ -7,7 +7,6 @@
 
 namespace
 {
-
 /**
  * Connect to the database.
  * @param options Options for creating the connections.
